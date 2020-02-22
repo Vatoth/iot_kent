@@ -43,7 +43,7 @@ services:
       - "traefik.http.routers.graphana.rule=Host(`graphana.vatoth.dev`)"
       - "traefik.http.routers.graphana.entrypoints=https"
       - "traefik.http.routers.graphana.tls.certresolver=letsencrypt"
-      #- "traefik.http.services.graphana.loadbalancer.server.port=8086"
+      - "traefik.http.services.graphana.loadbalancer.server.port=3000"
       - "traefik.docker.network=proxy"
 
 networks:
