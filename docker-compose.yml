@@ -15,6 +15,7 @@ services:
     container_name: influxdb
     networks:
       - iot_internal
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.influxdb.rule=Host(`influxdb.vatoth.dev`)"
@@ -31,7 +32,7 @@ services:
     networks:
       - iot_internal
     volumes:
-      - ./telegraf.conf:/etc/telegraf
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
     
   grafana:
     image: grafana/grafana
