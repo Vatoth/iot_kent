@@ -1,0 +1,69 @@
+version: "3"
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    restart: always
+    networks:
+      - iot_internal
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  
+  kotori:
+    image: agross/kotori
+    networks:
+      - iot_internal
+      - proxy
+    build:
+      context: kotori
+    volumes:
+      - ./kotori/conf.d/:/kotori/:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kotori.rule=Host(`kotori.vatoth.dev`)"
+      - "traefik.http.routers.kotori.entrypoints=https"
+      - "traefik.http.routers.kotori.tls.certresolver=letsencrypt"
+      - "traefik.http.services.kotori.loadbalancer.server.port=24642"
+      - "traefik.docker.network=proxy"
+  
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - iot_internal
+      - proxy
+    ports:
+      - "8083:8083"
+      - "8090:8090"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.influxdb.rule=Host(`influxdb.vatoth.dev`)"
+      - "traefik.http.routers.influxdb.entrypoints=https"
+      - "traefik.http.routers.influxdb.tls.certresolver=letsencrypt"
+      - "traefik.http.services.influxdb.loadbalancer.server.port=8086"
+      #- "traefik.http.routers.mosquito.middlewares=security_headers@file"
+      - "traefik.docker.network=proxy"
+    volumes:
+    - ./influxdb/data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      GF_INSTALL_PLUGINS: fatcloud-windrose-panel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.graphana.rule=Host(`graphana.vatoth.dev`)"
+      - "traefik.http.routers.graphana.entrypoints=https"
+      - "traefik.http.routers.graphana.tls.certresolver=letsencrypt"
+      #- "traefik.http.services.graphana.loadbalancer.server.port=8086"
+      - "traefik.docker.network=proxy"
+
+networks:
+  iot_internal:
+  proxy:
+    external: true
+
+volumes:
+  db_data: {}
