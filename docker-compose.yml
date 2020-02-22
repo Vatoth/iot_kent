@@ -15,9 +15,13 @@ services:
     container_name: influxdb
     networks:
       - iot_internal
-    ports:
-      - "8083:8083"
-      - "8090:8090"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.influxdb.rule=Host(`influxdb.vatoth.dev`)"
+      - "traefik.http.routers.influxdb.entrypoints=https"
+      - "traefik.http.routers.influxdb.tls.certresolver=letsencrypt"
+      - "traefik.http.services.influxdb.loadbalancer.server.port=8086"
+      - "traefik.docker.network=proxy"
     volumes:
       - ./influxdb/data:/var/lib/influxdb
 
@@ -26,6 +30,9 @@ services:
     container_name: telegraf
     networks:
       - iot_internal
+    volumes:
+      - ./telegraf.conf:/etc/telegraf
+    
   grafana:
     image: grafana/grafana
     environment:
