@@ -7,6 +7,7 @@ services:
       - iot_internal
     ports:
       - 1883:1883
+      - 9001:9001
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
 
@@ -38,6 +39,9 @@ services:
     image: grafana/grafana
     environment:
       GF_INSTALL_PLUGINS: fatcloud-windrose-panel
+    networks:
+      - iot_internal
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.graphana.rule=Host(`graphana.vatoth.dev`)"
