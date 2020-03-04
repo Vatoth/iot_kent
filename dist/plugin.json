@@ -23,7 +23,7 @@
       {"name": "Options", "path": "img/screenshot-clock-options.png"}
     ],
     "version": "1.0.4-dev",
-    "updated": "2020-02-24"
+    "updated": "2020-03-04"
   },
 
   "dependencies": {

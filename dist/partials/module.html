@@ -4,7 +4,9 @@
   </span>
   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   <button ng-click="ctrl.onClickOn()">Led On</button>
-  <button ng-click="ctrl.onClickOff()">Led off</button>
+  <button ng-click="ctrl.onClickOff()">Led Off</button>
+  <button ng-click="ctrl.onMotorOn()">Motor On</button>
+  <button ng-click="ctrl.onMotorOff()">Motor Off</button>
   <h2 style="font-size: {{ctrl.panel.timeSettings.fontSize}}; font-weight: {{ctrl.panel.timeSettings.fontWeight}};">{{ctrl.time}}</h2>
   <h4 ng-if="ctrl.panel.timezone && ctrl.panel.timezoneSettings.showTimezone" style="font-size: {{ctrl.panel.timezoneSettings.fontSize}}; font-weight: {{ctrl.panel.timezoneSettings.fontWeight}};" ng-bind-html="ctrl.zone"></h4>
 </div>
