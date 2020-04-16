@@ -8,6 +8,13 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mosquitto.rule=Host(`mosquitto.vatoth.dev`)"
+      - "traefik.http.routers.mosquitto.entrypoints=https"
+      - "traefik.http.routers.mosquitto.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mosquitto.loadbalancer.server.port=9001"
+      - "traefik.docker.network=proxy"
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
 
@@ -44,7 +51,7 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.graphana.rule=Host(`graphana.vatoth.dev`)"
+      - "traefik.http.routers.graphana.rule=Host(`grafana.vatoth.dev`)"
       - "traefik.http.routers.graphana.entrypoints=https"
       - "traefik.http.routers.graphana.tls.certresolver=letsencrypt"
       - "traefik.http.services.graphana.loadbalancer.server.port=3000"
