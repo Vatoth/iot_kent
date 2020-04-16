@@ -5,6 +5,7 @@ services:
     restart: always
     networks:
       - iot_internal
+      - proxy
     ports:
       - 1883:1883
       - 9001:9001
